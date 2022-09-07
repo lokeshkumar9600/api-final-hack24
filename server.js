@@ -20,3 +20,5 @@ app.get("/",(req,res)=>{
 app.listen(5000,(req, res)=>{
 console.log("server is running");
 });
+
+module.exports = app;
