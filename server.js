@@ -82,6 +82,11 @@ app.get("/",(req,res)=>{
 });
 
 
+app.get("/insertField",(req, res) => {
+    res.sendFile(__dirname + "/index.html", )
+})
+
+
 app.post("/insert/fieldsales",(req,res)=>{
     console.log(req.body);
     var data =  {  
