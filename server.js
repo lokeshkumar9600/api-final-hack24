@@ -78,7 +78,7 @@ app.get("/Insert",(req,res)=>{
 // routes section
 
 app.get("/",(req,res)=>{
-    res.send("hello world");
+    res.json({"message": "hello world"});
 });
 
 
