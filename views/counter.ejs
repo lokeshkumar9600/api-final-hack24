@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!-- Coding by CodingLab | www.codinglabweb.com-->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title> Stopwatch application | CodingLab </title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+      /* Google fonts import link */
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins',sans-serif;
+      }
+      body{
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #7D2Ae8;
+      }
+      .wrapper{
+        user-select: none;
+      }
+      .wrapper .time{
+        height: 100px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        box-shadow: 10px 10px 20px rgba(0,0,0,0.09);
+        padding: 0 10px;
+      }
+      .wrapper .time span{
+        width: 100px;
+        text-align: center;
+        font-size: 50px;
+        font-weight: 500;
+        color: #333;
+      }
+      .time span.colon{
+        width: 10px;
+      }
+      .time span.ms-colon,
+      .time span.millisecond{
+        color: #7D2Ae8;
+      }
+      .wrapper .buttons{
+        text-align: center;
+        margin-top: 20px;
+      }
+      .buttons button{
+        padding: 6px 16px;
+        outline: none;
+        border: none;
+        margin: 0 5px;
+        color: #7D2Ae8;
+        background: #fff;
+        font-size: 19px;
+        font-weight: 500;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 10px 10px 20px rgba(0,0,0,0.09);
+      }
+      .buttons button.active,
+      .buttons button.stopActive{
+        pointer-events: none;
+        opacity: 0.7;
+      }
+
+    </style>
+   </head>
+<body>
+  <div class="wrapper">
+    <h2><%=location%></h2>
+    <div class="time">
+      <span class="hour">00</span>
+      <span class="colon">:</span>
+      <span class="minute">00</span>
+      <span class="colon">:</span>
+      <span class="second">00</span>
+    </div>
+    <div class="buttons">
+      <a href="/fieldlogin" class="stop">Stop</a>
+    </div>
+  </div>
+
+  <script>
+   
+    let hr = min = sec = ms = "0" + 0, startTimer;
+    const stopBtn = document.querySelector(".stop");
+    stopBtn.addEventListener("click", stop);
+    window.onload = function(){
+      stopBtn.classList.remove("stopActive");
+      startTimer = setInterval(()=>{
+        ms++
+        ms = ms < 10 ? "0" + ms : ms;
+        if(ms == 100){
+          sec++;
+          sec = sec < 10 ? "0" + sec : sec;
+          ms = "0" + 0;
+        }
+        if(sec == 60){
+          min++;
+          min = min < 10 ? "0" + min : min;
+          sec = "0" + 0;
+        }
+        if(min == 60){
+          hr++;
+          hr = hr < 10 ? "0" + hr : hr;
+          min = "0" + 0;
+        }
+        putValue();
+      },10); //1000ms = 1s
+    }
+
+    function stop() {
+      stopBtn.classList.add("stopActive");
+      clearInterval(startTimer);
+      const ess = sec;
+      const emm = min;
+      const ehh = hr;
+      let x = ehh + ":" + emm + ":" + ess;
+      console.log(x);
+      fetch("/ex", {
+     
+     // Adding method type
+     method: "POST",
+      
+     // Adding body or contents to send
+     body: JSON.stringify({
+         time:x,
+         location:'<%-location%>'
+     }),
+      
+     // Adding headers to the request
+     headers: {
+         "Content-type": "application/json; charset=UTF-8"
+     }
+ })
+    }
+
+    function putValue() {
+      document.querySelector(".second").innerText = sec;
+      document.querySelector(".minute").innerText = min;
+      document.querySelector(".hour").innerText = hr;
+    }
+  </script>
+
+</body>
+</html>

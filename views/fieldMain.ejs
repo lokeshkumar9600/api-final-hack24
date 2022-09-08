@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="field.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <title>Field User Main Page</title>
+  </head>
+  <body>
+  <div class="uptext">
+    <h2>page reached</h2>
+    <h2><%=save.Email%></h2>
+    <h2>Todays days: <%=save.tasks[save.tasks.length-1].taskDate%></h2>
+  </div>
+    <div class="row">
+      <div class="column">
+        <div class="card">
+          <h1>Location 1:</h1>
+          <h2>
+            Address: <%=save.tasks[save.tasks.length-1].location1.address%>
+          </h2>
+          <h2>
+            Latitude: <%=save.tasks[save.tasks.length-1].location1.latitude%>
+          </h2>
+          <h2>
+            longitude: <%=save.tasks[save.tasks.length-1].location1.long%>
+          </h2>
+          <a href="/location1/counter" class="button">Start</a>
+          <a href="/location1/counter" class="button">Stop</a>
+        </div>
+      </div>
+      <div class="column">
+        <div class="card">
+          <h1>Location 2:</h1>
+          <h2>
+            Address: <%=save.tasks[save.tasks.length-1].location2.address%>
+          </h2>
+          <h2>
+            Latitude: <%=save.tasks[save.tasks.length-1].location2.latitude%>
+          </h2>
+          <h2>
+            longitude: <%=save.tasks[save.tasks.length-1].location2.long%>
+          </h2>
+          <a href="/location1/counter" class="button">Start</a>
+          <a href="/location1/counter" class="button">Stop</a>
+        </div>
+      </div>
+      <div class="column">
+        <div class="card">
+          <h1>Location 3:</h1>
+          <h2>
+            Address: <%=save.tasks[save.tasks.length-1].location3.address%>
+          </h2>
+          <h2>
+            Latitude: <%=save.tasks[save.tasks.length-1].location3.latitude%>
+          </h2>
+          <h2>
+            longitude: <%=save.tasks[save.tasks.length-1].location3.long%>
+          </h2>
+          <a href="/location1/counter" class="button">Start</a>
+          <a href="/location1/counter" class="button">Stop</a>
+        </div>
+      </div>
+      <div class="column">
+        <div class="card">
+          <h1>Location 4:</h1>
+          <h2>
+            Address: <%=save.tasks[save.tasks.length-1].location4.address%>
+          </h2>
+          <h2>
+            Latitude: <%=save.tasks[save.tasks.length-1].location4.latitude%>
+          </h2>
+          <h2>
+            longitude: <%=save.tasks[save.tasks.length-1].location4.long%>
+          </h2>
+          <a href="/location1/counter" class="button">Start</a>
+          <a href="/location1/counter" class="button">Stop</a>
+        </div>
+      </div>
+      <div class="column">
+        <div class="card">
+          <h1>Location 5:</h1>
+          <h2>
+            Address: <%=save.tasks[save.tasks.length-1].location5.address%>
+          </h2>
+          <h2>
+            Latitude: <%=save.tasks[save.tasks.length-1].location5.latitude%>
+          </h2>
+          <h2>
+            longitude: <%=save.tasks[save.tasks.length-1].location5.long%>
+          </h2>
+          <a href="/location1/counter" class="button">Start</a>
+          <a href="/location1/counter" class="button">Stop</a>
+        </div>
+      </div>
+    </div>
+    <div id="map"></div>
+  </body>
+  <script>
+
+
+
+
+
+
+
+    let lat1 = '<%-save.tasks[save.tasks.length-1].location1.latitude%>'
+    let lat2 = '<%-save.tasks[save.tasks.length-1].location2.latitude%>'
+    let lat3 = '<%-save.tasks[save.tasks.length-1].location3.latitude%>'
+    let lat4 = '<%-save.tasks[save.tasks.length-1].location4.latitude%>'
+    let lat5 = '<%-save.tasks[save.tasks.length-1].location5.latitude%>'
+    let long1 = '<%-save.tasks[save.tasks.length-1].location1.long%>'
+    let long2 = '<%-save.tasks[save.tasks.length-1].location2.long%>'
+    let long3 = '<%-save.tasks[save.tasks.length-1].location3.long%>'
+    let long4 = '<%-save.tasks[save.tasks.length-1].location4.long%>'
+    let long5 = '<%-save.tasks[save.tasks.length-1].location5.long%>'
+    var locations = [
+      [lat1,long1],
+      [lat2,long2],
+      [lat3,long3],
+      [lat4,long4],
+      [lat5,long5]
+    ]
+    
+    // Map initialization 
+    var map = L.map('map').setView([14.0860746, 100.608406], 6);
+
+    //osm layer
+    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    osm.addTo(map);
+
+    if(!navigator.geolocation) {
+        console.log("Your browser doesn't support geolocation feature!")
+    } else {
+        setInterval(() => {
+            navigator.geolocation.getCurrentPosition(getPosition)
+        }, 5000);
+    }
+
+    var marker, circle;
+
+    function getPosition(position){
+        // console.log(position)
+        var lat = position.coords.latitude
+        var long = position.coords.longitude
+        var accuracy = position.coords.accuracy
+
+        if(marker) {
+            map.removeLayer(marker)
+        }
+
+        if(circle) {
+            map.removeLayer(circle)
+        }
+
+        marker = L.marker([lat, long])
+        circle = L.circle([lat, long], {radius: accuracy})
+
+        var featureGroup = L.featureGroup([marker, circle]).addTo(map)
+
+        map.fitBounds(featureGroup.getBounds())
+
+        console.log("Your coordinate is: Lat: "+ lat +" Long: "+ long+ " Accuracy: "+ accuracy)
+        fetch("https://jsonplaceholder.typicode.com/posts", {
+     
+     // Adding method type
+     method: "POST",
+      
+     // Adding body or contents to send
+     body: JSON.stringify({
+         title: "foo",
+         body: "bar",
+         userId: 1
+     }),
+      
+     // Adding headers to the request
+     headers: {
+         "Content-type": "application/json; charset=UTF-8"
+     }
+ })
+        
+    }
+    
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+var polyline = new L.Polyline(locations, {
+        color: 'red',
+        weight: 5,
+        smoothFactor: 1
+    }).addTo(map);
+  L.marker([lat1,long1]).addTo(map)
+  L.marker([lat2,long2]).addTo(map)
+  L.marker([lat3,long3]).addTo(map)
+  L.marker([lat4,long4]).addTo(map)
+  L.marker([lat5,long5]).addTo(map)
+  polyline.spliceLatLng(lat1,lat2,lat3,lat4)
+  
+
+  </script>
+</html>

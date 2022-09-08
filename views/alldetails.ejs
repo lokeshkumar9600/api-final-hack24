@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #map{
+            height:400px;
+            width:90%;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <%=save.Email%>
+    <div id="map"></div>
+</body>
+<script>
+    var map = L.map('map').setView([14.0860746, 100.608406], 6);
+
+//osm layer
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+
+
+var marker, circle;
+
+function getPosition(position){
+    // console.log(position)
+    var lat = '<%-save.tasks[save.tasks.length-1].location1.latitude%>'
+    var long = '<%-save.tasks[save.tasks.length-1].location1.long%>'
+    
+
+    if(marker) {
+        map.removeLayer(marker)
+    }
+
+   
+
+    marker = L.marker([lat, long])
+    
+
+    var featureGroup = L.featureGroup([marker]).addTo(map)
+
+    map.fitBounds(featureGroup.getBounds())
+
+    console.log("Your coordinate is: Lat: "+ lat +" Long: "+ long)
+}
+</script>
+</html>

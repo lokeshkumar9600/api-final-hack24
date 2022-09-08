@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realtime location tracker</title>
+
+    <!-- leaflet css  -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    print("Your coordinate is: Lat: "+ lat +" Long: "+ long)
+</body>
+</html>
+
+<!-- leaflet js  -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    // Creating map options
+    var mapOptions = {
+       center: [16.506174, 80.648015],
+       zoom: 7
+    }
+    // Creating a map object
+    var map = new L.map('map', mapOptions);
+    
+    // Creating a Layer object
+    var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    
+    // Adding layer to the map
+    map.addLayer(layer);
+    
+    // Creating latlng object
+    var latlang = [
+       [[17.385044, 78.486671], [16.506174, 80.648015], [17.686816, 83.218482]],
+       [[13.082680, 80.270718], [12.971599, 77.594563],[15.828126, 78.037279]]
+    ];
+    // Creating multi polygon options
+    var multiPolygonOptions = {color:'red', weight:8};
+    
+    // Creating multi polygons
+    var multipolygon = L.multiPolygon(latlang , multiPolygonOptions);
+    
+    // Adding multi polygon to map
+    multipolygon.addTo(map);
+ </script>
