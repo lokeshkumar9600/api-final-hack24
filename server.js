@@ -1,6 +1,10 @@
 const express = require("express");
 const app = express();
 const mongoose  = require("mongoose");
+const XLSX  = require("xlsx");
+const fs = require("fs");
+// XLSX.set_fs(fs);
+
 app.use(express.json());
 let  bodyParser = require('body-parser');
 var ejs = require('ejs');
@@ -105,6 +109,15 @@ app.get("/admin",(req, res)=>{
     res.sendFile(__dirname + "/administrative.html");
 });
 
+app.post("/handleLocation",(req,res)=>{
+    const {latitude,longitude} = req.body;
+    var obj = [{latitude:latitude,longitude:longitude}];
+    const ws = XLSX.utils.json_to_sheet(obj)
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb,ws,'Location')
+    XLSX.writeFile(wb, 'sampleData.export.xlsx')
+    console.log(latitude,longitude);
+});
 
 app.post("/check",(req, res)=>{
     console.log(req.body);
